@@ -18,7 +18,7 @@
   <Dialog v-model:visible="catFactDialog" header="Cat fact details" :modal="true">
     <div>
       <label for="description">Description</label>
-      <Textarea id="description" v-model="catFact.description" required="true" rows="3" cols="20" fluid
+      <Textarea id="description" v-model="catFact.description" required="true" rows="3" cols="20" fluid autofocus
       :invalid="submitted && !catFact.description" />
       <small v-if="submitted && !catFact.description" class="text-red-500">Description is required.</small>
     </div>
