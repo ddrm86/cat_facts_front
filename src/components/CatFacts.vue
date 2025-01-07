@@ -25,7 +25,7 @@
 
     <template #footer>
       <Button label="Cancel" icon="pi pi-times" text @click="hideDialog" />
-      <Button label="Save" icon="pi pi-check" @click="saveFact" />
+      <Button label="Save" :loading="savingCatFact" icon="pi pi-check" @click="saveFact" />
     </template>
   </Dialog>
 </template>
@@ -47,6 +47,7 @@ const catFact = ref({} as CatFact);
 const catFactDialog = ref(false);
 const submitted = ref(false);
 const loadingCatFacts = ref(true);
+const savingCatFact = ref(false);
 const backendError = ref(false);
 
 onMounted(() => {
@@ -74,6 +75,7 @@ const hideDialog = () => {
 
 const saveFact = () => {
   submitted.value = true;
+  savingCatFact.value = true;
 
   if (catFact?.value.description?.trim()) {
     axios
@@ -88,6 +90,7 @@ const saveFact = () => {
       .finally(() => {
         catFactDialog.value = false;
         catFact.value = {};
+        savingCatFact.value = false;
       });
   }
 };
