@@ -55,6 +55,7 @@ onMounted(() => {
 });
 
 const fetchCatFacts = () => {
+  loadingCatFacts.value = true;
   axios
     .get('/')
     .then(response => { catFacts.value = response.data; backendError.value = false; })
