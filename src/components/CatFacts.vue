@@ -76,9 +76,9 @@ const hideDialog = () => {
 
 const saveFact = () => {
   submitted.value = true;
-  savingCatFact.value = true;
 
   if (catFact?.value.description?.trim()) {
+    savingCatFact.value = true;
     axios
       .post('/', { description: catFact.value.description })
       .then(() => {
