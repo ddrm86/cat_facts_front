@@ -6,9 +6,14 @@
       </template>
     </Toolbar>
 
-    <DataTable :value="catFacts" :loading="loadingCatFacts">
+    <DataTable :value="catFacts" dataKey="id" :loading="loadingCatFacts">
       <Column field="id" header="UUID"></Column>
       <Column field="description" header="Description"></Column>
+      <Column :exportable="false">
+        <template #body="slotProps">
+          <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteFact(slotProps.data)" />
+        </template>
+      </Column>
     </DataTable>
   </div>
   <div v-else>
@@ -26,6 +31,18 @@
     <template #footer>
       <Button label="Cancel" icon="pi pi-times" text @click="hideDialog" />
       <Button label="Save" :loading="savingCatFact" icon="pi pi-check" @click="saveFact" />
+    </template>
+  </Dialog>
+
+  <Dialog v-model:visible="deleteFactDialog" header="Confirm" :modal="true">
+    <div class="flex items-center gap-4">
+      <i class="pi pi-exclamation-triangle !text-3xl" />
+      <span>Are you sure you want to delete this cat fact? 😿</span>
+    </div>
+    <div class="flex items-center justify-center"><small>{{ catFact.description?.substring(0, 40) + '...' }}</small></div>
+    <template #footer>
+      <Button label="No" icon="pi pi-times" text @click="deleteFactDialog = false" />
+      <Button label="Yes" icon="pi pi-check" :loading="deletingCatFact" @click="deleteFact" />
     </template>
   </Dialog>
 </template>
@@ -49,6 +66,8 @@ const submitted = ref(false);
 const loadingCatFacts = ref(true);
 const savingCatFact = ref(false);
 const backendError = ref(false);
+const deleteFactDialog = ref(false);
+const deletingCatFact = ref(false);
 
 onMounted(() => {
   fetchCatFacts();
@@ -95,5 +114,28 @@ const saveFact = () => {
       });
   }
 };
+
+const confirmDeleteFact = (prod: CatFact) => {
+  catFact.value = prod;
+  deleteFactDialog.value = true;
+}
+
+const deleteFact = () => {
+  deletingCatFact.value = true;
+  axios
+    .delete(`/${catFact.value.id}`)
+    .then(() => {
+      toast.add({severity:'success', summary: 'Successful', detail: 'Fact deleted', life: 3000});
+      fetchCatFacts();
+    })
+    .catch(error => {
+      toast.add({severity:'error', summary: 'Error', detail: `Error deleting fact: ${error}`, life: 3000});
+    })
+    .finally(() => {
+      deleteFactDialog.value = false;
+      catFact.value = {};
+      deletingCatFact.value = false;
+    });
+}
 
 </script>
