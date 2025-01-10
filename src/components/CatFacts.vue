@@ -35,11 +35,15 @@
   </Dialog>
 
   <Dialog v-model:visible="deleteFactDialog" header="Confirm" :modal="true">
-    <div class="flex items-center gap-4">
-      <i class="pi pi-exclamation-triangle !text-3xl" />
-      <span>Are you sure you want to delete this cat fact? 😿</span>
+    <div class="flex flex-col justify-center">
+      <div class="flex items-center pb-4">
+        <i class="pi pi-exclamation-triangle !text-3xl" />
+        <span>Are you sure you want to delete this cat fact? 😿</span>
+      </div>
+      <div class="flex items-center max-w-64 bg-slate-100 rounded shadow mx-auto">
+        <small class="truncate ...">{{ catFact.description }}</small>
+      </div>
     </div>
-    <div class="flex items-center justify-center max-w-64"><small class="truncate ...">{{ catFact.description }}</small></div>
     <template #footer>
       <Button label="No" icon="pi pi-times" text @click="deleteFactDialog = false" />
       <Button label="Yes" icon="pi pi-check" :loading="deletingCatFact" @click="deleteFact" />
