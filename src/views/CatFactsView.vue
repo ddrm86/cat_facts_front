@@ -4,7 +4,7 @@
 
 <template>
   <div class="cat-facts">
-    <div class="flex justify-center pb-4"><h1 class="text-xl font-bold">Facts about cats 😺</h1></div>
+    <div class="flex justify-center pb-4"><h1 class="text-xl font-bold text-emerald-500">Facts about cats 😺</h1></div>
     <div><CatFacts /></div>
   </div>
 </template>
