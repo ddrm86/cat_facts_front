@@ -39,7 +39,7 @@
       <i class="pi pi-exclamation-triangle !text-3xl" />
       <span>Are you sure you want to delete this cat fact? 😿</span>
     </div>
-    <div class="flex items-center justify-center"><small>{{ catFact.description?.substring(0, 40) + '...' }}</small></div>
+    <div class="flex items-center justify-center max-w-64"><small class="truncate ...">{{ catFact.description }}</small></div>
     <template #footer>
       <Button label="No" icon="pi pi-times" text @click="deleteFactDialog = false" />
       <Button label="Yes" icon="pi pi-check" :loading="deletingCatFact" @click="deleteFact" />
