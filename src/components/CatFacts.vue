@@ -112,36 +112,44 @@ const saveFact = () => {
     const editing = catFact.value.id;
     savingCatFact.value = true;
     if (editing) {
-      axios
-        .patch(`/${catFact.value.id}`, {description: catFact.value.description})
-        .then(() => {
-          toast.add({severity: 'success', summary: 'Successful', detail: 'Fact updated', life: 3000});
-          fetchCatFacts();
-        })
-        .catch(error => {
-          toast.add({severity: 'error', summary: 'Error', detail: `Error updating fact: ${error}`, life: 3000});
-        })
-        .finally(() => {
-          catFactDialog.value = false;
-          catFact.value = {};
-          savingCatFact.value = false;
-        });
+      saveChanges();
     } else {
-      axios
-        .post('/', {description: catFact.value.description})
-        .then(() => {
-          toast.add({severity: 'success', summary: 'Successful', detail: 'Fact added', life: 3000});
-          fetchCatFacts();
-        })
-        .catch(error => {
-          toast.add({severity: 'error', summary: 'Error', detail: `Error adding fact: ${error}`, life: 3000});
-        })
-        .finally(() => {
-          catFactDialog.value = false;
-          catFact.value = {};
-          savingCatFact.value = false;
-        });
+      saveNew();
     }
+  }
+
+  function saveNew() {
+    axios
+      .post('/', {description: catFact.value.description})
+      .then(() => {
+        toast.add({severity: 'success', summary: 'Successful', detail: 'Fact added', life: 3000});
+        fetchCatFacts();
+      })
+      .catch(error => {
+        toast.add({severity: 'error', summary: 'Error', detail: `Error adding fact: ${error}`, life: 3000});
+      })
+      .finally(() => {
+        catFactDialog.value = false;
+        catFact.value = {};
+        savingCatFact.value = false;
+      });
+  }
+
+  function saveChanges() {
+    axios
+      .patch(`/${catFact.value.id}`, {description: catFact.value.description})
+      .then(() => {
+        toast.add({severity: 'success', summary: 'Successful', detail: 'Fact updated', life: 3000});
+        fetchCatFacts();
+      })
+      .catch(error => {
+        toast.add({severity: 'error', summary: 'Error', detail: `Error updating fact: ${error}`, life: 3000});
+      })
+      .finally(() => {
+        catFactDialog.value = false;
+        catFact.value = {};
+        savingCatFact.value = false;
+      });
   }
 };
 
