@@ -2,7 +2,7 @@
   <div v-if="!backendError">
     <Toolbar>
       <template #start>
-        <Button label="New" icon="pi pi-plus" @click="openNew" />
+        <Button label="New" icon="pi pi-plus" @click="openNew"/>
       </template>
     </Toolbar>
 
@@ -11,8 +11,8 @@
       <Column field="description" header="Description"></Column>
       <Column :exportable="false">
         <template #body="slotProps">
-          <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editFact(slotProps.data)" />
-          <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteFact(slotProps.data)" />
+          <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editFact(slotProps.data)"/>
+          <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteFact(slotProps.data)"/>
         </template>
       </Column>
     </DataTable>
@@ -25,20 +25,20 @@
     <div>
       <label for="description">Description</label>
       <Textarea id="description" v-model="catFact.description" required="true" rows="3" cols="20" fluid autofocus
-      :invalid="submitted && !catFact.description" />
+                :invalid="submitted && !catFact.description"/>
       <small v-if="submitted && !catFact.description" class="text-red-500">Description is required.</small>
     </div>
 
     <template #footer>
-      <Button label="Cancel" icon="pi pi-times" text @click="hideDialog" />
-      <Button label="Save" :loading="savingCatFact" icon="pi pi-check" @click="saveFact" />
+      <Button label="Cancel" icon="pi pi-times" text @click="hideDialog"/>
+      <Button label="Save" :loading="savingCatFact" icon="pi pi-check" @click="saveFact"/>
     </template>
   </Dialog>
 
   <Dialog v-model:visible="deleteFactDialog" header="Confirm" :modal="true">
     <div class="flex flex-col justify-center">
       <div class="flex items-center pb-4">
-        <i class="pi pi-exclamation-triangle !text-3xl" />
+        <i class="pi pi-exclamation-triangle !text-3xl"/>
         <span>Are you sure you want to delete this cat fact? 😿</span>
       </div>
       <div class="flex items-center max-w-64 bg-slate-100 rounded shadow mx-auto">
@@ -46,8 +46,8 @@
       </div>
     </div>
     <template #footer>
-      <Button label="No" icon="pi pi-times" text @click="deleteFactDialog = false" />
-      <Button label="Yes" icon="pi pi-check" :loading="deletingCatFact" @click="deleteFact" />
+      <Button label="No" icon="pi pi-times" text @click="deleteFactDialog = false"/>
+      <Button label="Yes" icon="pi pi-check" :loading="deletingCatFact" @click="deleteFact"/>
     </template>
   </Dialog>
 </template>
@@ -56,7 +56,7 @@
 
 import {ref, onMounted} from 'vue';
 import axios from "axios";
-import { useToast } from 'primevue/usetoast';
+import {useToast} from 'primevue/usetoast';
 
 interface CatFact {
   id?: string;
@@ -82,9 +82,16 @@ const fetchCatFacts = () => {
   loadingCatFacts.value = true;
   axios
     .get('/')
-    .then(response => { catFacts.value = response.data; backendError.value = false; })
-    .catch(() => { backendError.value = true; })
-    .finally(() => { loadingCatFacts.value = false; });
+    .then(response => {
+      catFacts.value = response.data;
+      backendError.value = false;
+    })
+    .catch(() => {
+      backendError.value = true;
+    })
+    .finally(() => {
+      loadingCatFacts.value = false;
+    });
 };
 
 const openNew = () => {
@@ -102,21 +109,39 @@ const saveFact = () => {
   submitted.value = true;
 
   if (catFact?.value.description?.trim()) {
+    const editing = catFact.value.id;
     savingCatFact.value = true;
-    axios
-      .post('/', { description: catFact.value.description })
-      .then(() => {
-        toast.add({severity:'success', summary: 'Successful', detail: 'Fact added', life: 3000});
-        fetchCatFacts();
-      })
-      .catch(error => {
-        toast.add({severity:'error', summary: 'Error', detail: `Error adding fact: ${error}`, life: 3000});
-      })
-      .finally(() => {
-        catFactDialog.value = false;
-        catFact.value = {};
-        savingCatFact.value = false;
-      });
+    if (editing) {
+      axios
+        .patch(`/${catFact.value.id}`, {description: catFact.value.description})
+        .then(() => {
+          toast.add({severity: 'success', summary: 'Successful', detail: 'Fact updated', life: 3000});
+          fetchCatFacts();
+        })
+        .catch(error => {
+          toast.add({severity: 'error', summary: 'Error', detail: `Error updating fact: ${error}`, life: 3000});
+        })
+        .finally(() => {
+          catFactDialog.value = false;
+          catFact.value = {};
+          savingCatFact.value = false;
+        });
+    } else {
+      axios
+        .post('/', {description: catFact.value.description})
+        .then(() => {
+          toast.add({severity: 'success', summary: 'Successful', detail: 'Fact added', life: 3000});
+          fetchCatFacts();
+        })
+        .catch(error => {
+          toast.add({severity: 'error', summary: 'Error', detail: `Error adding fact: ${error}`, life: 3000});
+        })
+        .finally(() => {
+          catFactDialog.value = false;
+          catFact.value = {};
+          savingCatFact.value = false;
+        });
+    }
   }
 };
 
@@ -135,11 +160,11 @@ const deleteFact = () => {
   axios
     .delete(`/${catFact.value.id}`)
     .then(() => {
-      toast.add({severity:'success', summary: 'Successful', detail: 'Fact deleted', life: 3000});
+      toast.add({severity: 'success', summary: 'Successful', detail: 'Fact deleted', life: 3000});
       fetchCatFacts();
     })
     .catch(error => {
-      toast.add({severity:'error', summary: 'Error', detail: `Error deleting fact: ${error}`, life: 3000});
+      toast.add({severity: 'error', summary: 'Error', detail: `Error deleting fact: ${error}`, life: 3000});
     })
     .finally(() => {
       deleteFactDialog.value = false;
