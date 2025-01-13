@@ -46,8 +46,8 @@
       </div>
     </div>
     <template #footer>
-      <Button label="No" icon="pi pi-times" text @click="deleteFactDialog = false"/>
-      <Button label="Yes" icon="pi pi-check" :loading="deletingCatFact" @click="deleteFact"/>
+      <Button label="No" icon="pi pi-times" text autofocus @click="deleteFactDialog = false"/>
+      <Button label="Yes" icon="pi pi-check" severity="danger" :loading="deletingCatFact" @click="deleteFact"/>
     </template>
   </Dialog>
 </template>
