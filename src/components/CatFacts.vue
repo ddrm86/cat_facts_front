@@ -120,10 +120,15 @@ const saveFact = () => {
   }
 };
 
+const editFact = (prod: CatFact) => {
+  catFact.value = {...prod};
+  catFactDialog.value = true;
+};
+
 const confirmDeleteFact = (prod: CatFact) => {
   catFact.value = prod;
   deleteFactDialog.value = true;
-}
+};
 
 const deleteFact = () => {
   deletingCatFact.value = true;
@@ -141,6 +146,6 @@ const deleteFact = () => {
       catFact.value = {};
       deletingCatFact.value = false;
     });
-}
+};
 
 </script>
