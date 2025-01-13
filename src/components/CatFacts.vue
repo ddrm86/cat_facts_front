@@ -11,6 +11,7 @@
       <Column field="description" header="Description"></Column>
       <Column :exportable="false">
         <template #body="slotProps">
+          <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editFact(slotProps.data)" />
           <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteFact(slotProps.data)" />
         </template>
       </Column>
